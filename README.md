@@ -12,7 +12,7 @@ and regular lists
 5. Set any other preferences and click Download
 6. The app asks you where to save and begins to download them
 
-<img src="http://i.imgur.com/bbxn8E8.png">
+<img src="http://i.imgur.com/4Lo72He.png">
 
 Requirements:
 
