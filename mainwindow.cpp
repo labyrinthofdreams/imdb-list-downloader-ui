@@ -105,7 +105,7 @@ void MainWindow::on_actionOpen_triggered()
     ui->plainTextLog->clear();
     ui->tableCsv->clear();
     ui->tableCsv->setColumnCount(headerParsed.size() + 1);
-    ui->tableCsv->setHorizontalHeaderLabels(QStringList() << "Username" << "URL" << "Status");
+    ui->tableCsv->setHorizontalHeaderLabels(QStringList() << "List Name" << "URL" << "Status");
     ui->tableCsv->setRowCount(lines.size());
 
     for(int row = 0; row < lines.size(); ++row) {
