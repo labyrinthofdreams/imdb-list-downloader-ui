@@ -123,7 +123,7 @@ void MainWindow::on_actionOpen_triggered()
 
     config.setValue("last_csv", openedFile);
 
-    QStringList lines = parseFile(openedFile);
+    const QStringList lines = parseFile(openedFile);
     const QString header = lines.first();
     const QStringList headerParsed = parseCsv(header);
 
