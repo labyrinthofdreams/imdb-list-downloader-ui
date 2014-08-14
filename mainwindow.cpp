@@ -54,6 +54,31 @@ static QStringList parseCsv(const QString& in) {
     return result;
 }
 
+static QList<QNetworkCookie> parseCookies(const QString& cookies) {
+    QList<QNetworkCookie> result;
+
+    const QStringList pairs = cookies.split("; ");
+    if(pairs.size() == 1) {
+        return {};
+    }
+
+    for(const QString& pair : pairs) {
+        const QStringList kv = pair.split("=");
+        if(kv.size() == 1) {
+            return {};
+        }
+
+        QByteArray key, value;
+        key.append(kv.at(0));
+        value.append(kv.at(1));
+
+        const QNetworkCookie cookie(key, value);
+        result.append(cookie);
+    }
+
+    return result;
+}
+
 static QStringList parseFile(const QString& in) {
     QStringList results;
     QFile inFile(in);
@@ -214,20 +239,14 @@ void MainWindow::on_buttonLoadCookies_clicked()
         return;
     }
 
-    netCookies.clear();
-
     const QString cookies = in.readAll();
-    const QStringList pairs = cookies.split("; ");
-    for(const QString& pair : pairs) {
-        const QStringList kv = pair.split("=");
-        QByteArray key, value;
-        key.append(kv.at(0));
-        value.append(kv.at(1));
-        const QNetworkCookie cookie(key, value);
-        netCookies.append(cookie);
+    netCookies = parseCookies(cookies);
+    if(netCookies.empty()) {
+        ui->plainTextLog->appendPlainText(tr("Invalid cookie format"));
+
+        return;
     }
 
-    ui->actionOpen->setEnabled(true);
     ui->plainTextLog->appendPlainText(tr("Loaded cookies."));
 }
 
