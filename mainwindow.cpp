@@ -210,13 +210,14 @@ void MainWindow::on_buttonLoadCookies_clicked()
 
     QFile in(openedFile);
     if(!in.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Could not open cookies";
+        ui->plainTextLog->appendPlainText(tr("Failed to open cookies file. Insufficient permissions?"));
         return;
     }
 
+    netCookies.clear();
+
     const QString cookies = in.readAll();
     const QStringList pairs = cookies.split("; ");
-    netCookies.clear();
     for(const QString& pair : pairs) {
         const QStringList kv = pair.split("=");
         QByteArray key, value;
