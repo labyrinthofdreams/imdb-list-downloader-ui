@@ -6,12 +6,12 @@
 #include <QMainWindow>
 #include <QRegExp>
 #include <QSettings>
-#include <QtNetwork/QNetworkRequest>
 
 class QColor;
 class QNetworkAccessManager;
 class QNetworkCookie;
 class QNetworkReply;
+class QNetworkRequest;
 class QString;
 class QUrl;
 
@@ -49,8 +49,6 @@ private:
     QList<QNetworkRequest> requests;
 
     QSettings config;
-
-    QNetworkRequest createRequest(const QUrl& url) const;
 
     void nextRequest();
 

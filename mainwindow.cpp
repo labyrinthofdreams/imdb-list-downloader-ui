@@ -130,7 +130,7 @@ void MainWindow::on_actionOpen_triggered()
         }
 
         if(!requestUrl.isEmpty()) {
-            requests.append(createRequest(requestUrl));
+            requests.append(QNetworkRequest(requestUrl));
         }
 
         qDebug() << "Added" << username << url << requestUrl;
@@ -151,7 +151,7 @@ void MainWindow::networkReplyFinished(QNetworkReply *reply)
         setRowStatus(row, tr("Failed. Retrying..."));
 
         // Enqueue the request
-        requests.append(createRequest(reply->url()));
+        requests.append(QNetworkRequest(reply->url()));
 
         // Start another request
         nextRequest();
@@ -227,18 +227,7 @@ void MainWindow::on_buttonLoadCookies_clicked()
     }
 
     ui->actionOpen->setEnabled(true);
-}
-
-QNetworkRequest MainWindow::createRequest(const QUrl& url) const
-{
-    QVariant cookieVar;
-    cookieVar.setValue(netCookies);
-
-    QNetworkRequest req(url);
-    req.setHeader(QNetworkRequest::UserAgentHeader, "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0");
-    req.setHeader(QNetworkRequest::CookieHeader, cookieVar);
-
-    return req;
+    ui->plainTextLog->appendPlainText(tr("Loaded cookies."));
 }
 
 void MainWindow::nextRequest()
@@ -247,13 +236,18 @@ void MainWindow::nextRequest()
         return;
     }
 
+    QVariant cookieVar;
+    cookieVar.setValue(netCookies);
+
     // Makes sure files are only overwritten if explicitly specified
     // or to request files that do not exist
     while(!requests.empty()) {
-        const QNetworkRequest req = requests.takeFirst();
-        const QUrl url = req.url();
+        QNetworkRequest req = requests.takeFirst();
+        req.setHeader(QNetworkRequest::CookieHeader, cookieVar);
 
+        const QUrl url = req.url();
         const int row = findItemRow(parseUrlId(url.toDisplayString()));
+
         const QString username = ui->tableCsv->item(row, 0)->text();
         const QString savePath = QString("%1/%2.csv").arg(config.value("save_to").toString()).arg(username);
         if(ui->checkBoxOverwrite->isChecked() || !QFile::exists(savePath)) {
