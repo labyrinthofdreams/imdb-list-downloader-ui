@@ -44,6 +44,7 @@ static QString parseListId(const QString& text) {
 
 static QStringList parseCsv(const QString& in) {
     QStringList result;
+
     std::vector<std::string> parsed;
     const std::string line = in.toStdString();
     sfcsv::parse_line(line, std::back_inserter(parsed), ',');
@@ -81,6 +82,7 @@ static QList<QNetworkCookie> parseCookies(const QString& cookies) {
 
 static QStringList parseFile(const QString& in) {
     QStringList results;
+
     QFile inFile(in);
     if(!inFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         throw std::runtime_error("Unable to open file");
