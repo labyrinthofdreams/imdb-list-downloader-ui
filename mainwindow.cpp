@@ -323,7 +323,8 @@ void MainWindow::setRowStatus(const int row, const QString& status)
 
 void MainWindow::setRowColor(const int row, const QColor& color)
 {
+    const QBrush brush(color);
     for(int column = 0, last = ui->tableCsv->columnCount(); column < last; ++column) {
-        ui->tableCsv->item(row, column)->setBackground(QBrush(color));
+        ui->tableCsv->item(row, column)->setBackground(brush);
     }
 }
